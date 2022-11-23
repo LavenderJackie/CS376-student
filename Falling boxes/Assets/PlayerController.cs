@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour {
     {
         get
         {
-            // TODO: Fix this
+            rigidBody.AddForce(new Vector2(1, 0));
             return false;
         }
     }

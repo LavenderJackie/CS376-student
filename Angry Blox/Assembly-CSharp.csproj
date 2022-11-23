@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{51B6EC5B-38A7-0B01-E801-8DF9F3745B65}</ProjectGuid>
+    <ProjectGuid>{2BEA5F23-84EA-2AE8-D76D-6D2E34992866}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -56,16 +56,10 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Code\util\CameraControl.cs" />
-    <Compile Include="Assets\Code\util\ScoreManager.cs" />
-    <Compile Include="Assets\Code\util\MathUtil.cs" />
-    <Compile Include="Assets\Code\Updraft.cs" />
-    <Compile Include="Assets\Code\MapGeneration\MapGen.cs" />
-    <Compile Include="Assets\Code\util\ExplosionController.cs" />
-    <Compile Include="Assets\Code\PlayerControl.cs" />
-    <Compile Include="Assets\Code\MapGeneration\Island.cs" />
-    <Compile Include="Assets\Code\Target.cs" />
-    <Compile Include="Assets\Code\LandingPlatform.cs" />
+    <Compile Include="Assets\Code\TargetBox.cs" />
+    <Compile Include="Assets\Code\Bomb.cs" />
+    <Compile Include="Assets\Code\ScoreKeeper.cs" />
+    <Compile Include="Assets\Code\ProjectileThrower.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -6,6 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
+    // what are we applying forces to in the game?
+    private Rigidbody2D player_body;
+
     /// <summary>
     /// Prefab for the orbs we will shoot
     /// </summary>
@@ -43,7 +46,10 @@ public class Player : MonoBehaviour
     /// </summary>
     void MaybeFire()
     {
-        // TODO
+        if(Input.GetAxis("Fire") != 0)
+        {
+            FireOrb();
+        }
     }
 
     /// <summary>
@@ -53,7 +59,11 @@ public class Player : MonoBehaviour
     /// </summary>
     private void FireOrb()
     {
-        // TODO
+        Vector3 shot_pos = transform.right;
+        shot_pos.x += player_body.position.x;
+        shot_pos.y += player_body.position.y;
+        GameObject shot = Instantiate(OrbPrefab, shot_pos, Quaternion.identity);
+        shot.GetComponent<Rigidbody2D>().velocity = OrbVelocity * player_body.transform.right;
     }
 
     /// <summary>
@@ -64,7 +74,13 @@ public class Player : MonoBehaviour
     /// </summary>
     void Manoeuvre()
     {
-        // TODO
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+
+        Vector2 dir = new Vector2(x, y);
+        player_body.AddForce(EnginePower * dir);
+
+        player_body.angularVelocity = RotateSpeed * Input.GetAxis("Rotate");
     }
 
     /// <summary>
@@ -74,5 +90,10 @@ public class Player : MonoBehaviour
     void OnBecameInvisible()
     {
         ScoreKeeper.ScorePoints(-1);
+    }
+
+    void Start()
+    {
+        player_body = GetComponent<Rigidbody2D>();
     }
 }

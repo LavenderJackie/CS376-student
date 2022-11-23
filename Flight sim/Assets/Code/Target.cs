@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.ComponentModel.Design.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// A target for the player to fly through
@@ -20,5 +21,14 @@ public class Target : MonoBehaviour {
     /// </summary>
     internal void Update() {
         transform.Rotate(SpinVector * SpinSpeed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<PlayerControl>() != null)
+        {
+            ScoreManager.IncreaseScore(other.gameObject, ScoreValue);
+            Destroy(this.gameObject);
+        }
     }
 }

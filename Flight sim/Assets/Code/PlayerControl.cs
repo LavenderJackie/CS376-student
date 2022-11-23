@@ -85,6 +85,10 @@ public class PlayerControl : MonoBehaviour {
     internal void Start() {
         playerRB = GetComponent<Rigidbody>();
         playerRB.velocity = transform.forward*3;
+        Vector3 rotation = playerRB.rotation.eulerAngles;
+        pitch = rotation.x;
+        yaw = rotation.y;
+        roll = rotation.z;
     }
 
     /// <summary>
@@ -111,5 +115,47 @@ public class PlayerControl : MonoBehaviour {
             playerRB.velocity.magnitude,
             transform.position.y,
             thrust);
+    }
+
+    private void FixedUpdate()
+    {
+        // rotation junk - the headache itself
+        // roll
+        roll = Mathf.Lerp(roll, (RollRange * Input.GetAxis("Horizontal")), 0.01f);
+        // pitch
+        pitch = Mathf.Lerp(pitch, (PitchRange * Input.GetAxis("Vertical")), 0.01f);
+        // yaw
+        yaw = yaw - (Time.deltaTime * RotationalSpeed * roll);
+
+        playerRB.rotation = Quaternion.Euler(pitch, yaw, roll);
+
+        // forcing stuff
+        float thrust_in = Input.GetAxis("Thrust");
+        thrust_in = (thrust_in < 0 ? 0 : thrust_in) * MaximumThrust;
+        playerRB.AddForce(thrust_in * transform.forward);
+
+        // aerodynamics
+        Vector3 wind = -1 * playerRB.velocity;
+        foreach (Collider c in Physics.OverlapSphere(transform.position, 1.0f, LayerMask.GetMask("Updrafts")))
+        {
+            Updraft updraft = c.gameObject.GetComponent<Updraft>();
+            wind = wind + updraft.WindVelocity;
+        }
+        float vf = Vector3.Dot(wind, transform.forward);
+        float vf2 = Mathf.Pow(vf,2);
+        // lift
+        playerRB.AddForce(vf2 * LiftCoefficient * transform.up);
+        // forward drag
+        playerRB.AddForce((vf < 0 ? -1 : 1) * vf2 * ForwardDragCoefficient * transform.forward);
+        // upward drag
+        float vup = Vector3.Dot(wind, transform.up);
+        playerRB.AddForce((vup < 0 ? -1 : 1) * Mathf.Pow(vup, 2) * VerticalDragCoefficient * transform.up);
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        LandingPlatform lp = collision.gameObject.GetComponent<LandingPlatform>();
+        OnGameOver(lp != null && collision.relativeVelocity.magnitude < lp.MaxLandingSpeed);
     }
 }
